@@ -163,16 +163,17 @@ def playVideo(url):
     
     # If the video is Vimeo (most likely) get the Vimeo URL
     if re.search(r'vimeo', url):
-        videoUrl = vimeo.pull_video_url(url)
+        videoUrl = cache.cacheFunction(vimeo.pull_video_url, url)
+        success = True
     # If Ustream, the same
     elif re.search(r'ustream', self.url):
-        videoUrl = ustream.pull_video_url(url)
-    # If neither, assume audio and get nothing
+        videoUrl = cache.cacheFunction(ustream.pull_video_url, url)
+        success = True
     else:
-        videoUrl = url
+        success = False
     
     # add video details to listitem
     listitem = xbmcgui.ListItem(path = videoUrl)
     
     # play listitem
-    xbmcplugin.setResolvedUrl(handle=__addonidint__, succeeded=True, listitem=listitem)  
+    xbmcplugin.setResolvedUrl(handle = __addonidint__, succeeded = success, listitem = listitem)  

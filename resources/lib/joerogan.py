@@ -45,7 +45,10 @@ def pull_video_list(page_no):
                 # Get the video URL
                 video['url'] = div.center.a['href']
             except:
-                video['url'] = r.find('div', 'post-bodycopy clearfix').center.iframe['src']
+                try:
+                    video['url'] = r.find('div', 'post-bodycopy clearfix').center.iframe['src']
+                except:
+                    continue
             try:
                 # Get the thumbnail
                 video['thumb'] = div.center.img['src']
