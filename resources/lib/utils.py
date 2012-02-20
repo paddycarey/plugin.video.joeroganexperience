@@ -166,7 +166,7 @@ def playVideo(url):
         videoUrl = cache.cacheFunction(vimeo.pull_video_url, url)
         success = True
     # If Ustream, the same
-    elif re.search(r'ustream', self.url):
+    elif re.search(r'ustream', url):
         videoUrl = cache.cacheFunction(ustream.pull_video_url, url)
         success = True
     else:
