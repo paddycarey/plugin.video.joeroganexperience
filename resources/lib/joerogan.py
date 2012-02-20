@@ -51,29 +51,29 @@ def pull_video_list(page_no):
                 video['thumb'] = div.center.img['src']
             except:
                 video['thumb'] = ''
-            try:
-                guests = ''
-                # Check if the Guests exist (some videos don't have any guests)
-                guests_twit = div.findAll('a', href=re.compile('(http://www.twitter.com/.*)|(http://twitter.com/#!/.*)'))
-                for count in range(len(guests_twit)):
-                    guest = re.sub(r',|\ $', '', guests_twit[count].string) 
-                    if count == 0:
-                        guests = ' (' + guest
-                    elif count == len(guests_twit)-1:
-                        guests = guests + ' & ' + guest + ")"
-                    else:
-                        guests = guests + ', ' +  guest
-                    if len(guests_twit)-1 == 0:
-                        guests = guests + ')' 
-            except:
-                video['guests'] = ''
-            else:
-                video['guests'] = guests
+            #try:
+                #guests = ''
+                ## Check if the Guests exist (some videos don't have any guests)
+                #guests_twit = div.findAll('a', href=re.compile('(http://www.twitter.com/.*)|(http://twitter.com/#!/.*)'))
+                #for count in range(len(guests_twit)):
+                    #guest = re.sub(r',|\ $', '', guests_twit[count].string) 
+                    #if count == 0:
+                        #guests = ' (' + guest
+                    #elif count == len(guests_twit)-1:
+                        #guests = guests + ' & ' + guest + ")"
+                    #else:
+                        #guests = guests + ', ' +  guest
+                    #if len(guests_twit)-1 == 0:
+                        #guests = guests + ')' 
+            #except:
+                #video['guests'] = ''
+            #else:
+                #video['guests'] = guests
 
         utils.log('Video found: %s' % video['title'])
         utils.log('URL: %s' % video['url'])
         utils.log('Thumb: %s' % video['thumb'])
-        utils.log('Guests: %s' % video['guests'])
+        #utils.log('Guests: %s' % video['guests'])
         videos.append(video)
 
     return videos
