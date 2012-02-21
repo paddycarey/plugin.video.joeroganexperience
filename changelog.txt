@@ -1,3 +1,7 @@
+[B]0.9.1[/B]
+- Now using plugin.video.vimeo to play videos from vimeo rather than scraping urls manually
+- Further cleanup and commenting
+
 [B]0.9[/B]
 - Updated for eden
 

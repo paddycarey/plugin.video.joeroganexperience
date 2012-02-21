@@ -37,8 +37,7 @@ class Main:
                 # Set page number to 1 if not dound
                 pageNum = 1
             video_list = {}
-            #video_list = cache.cacheFunction(joerogan.pull_video_list, pageNum)
-            video_list = joerogan.pull_video_list(pageNum)
+            video_list = cache.cacheFunction(joerogan.pull_video_list, pageNum)
             # send each item to XBMC, mode 3 opens video
             for video in video_list:
                 utils.addVideo(linkName = video['title'], source = video['src'], videoID = video['id'], thumbPath = video['thumb'])
