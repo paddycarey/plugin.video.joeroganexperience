@@ -54,9 +54,28 @@ def pull_video_list(page_no):
                 video['thumb'] = div.center.img['src']
             except:
                 video['thumb'] = ''
-
+        
+        if re.search(r'vimeo', video['url']):
+            video['src'] = 'vimeo'
+            # Extract clip ID from the URL, method varying depending on whether it's player.vimeo.com or vimeo.com/id
+            if re.search(r'player.vimeo.com/video', video['url']):
+                url_section = video['url'].split('/')
+                clip_id = url_section[4]
+                clip_id = clip_id.split('?')[0]
+            else:
+                url_section =  video['url'].split('/')
+                clip_id = url_section[3]
+            video['id'] = clip_id
+        elif re.search(r'ustream', video['url']):
+            video['src'] = 'ustream'
+            video['id'] = video['url'].replace('http://www.ustream.tv/recorded/', '')
+        else:
+            continue
+        
         utils.log('Video found: %s' % video['title'])
         utils.log('URL: %s' % video['url'])
+        utils.log('Source: %s' % video['src'])
+        utils.log('VideoID: %s' % video['id'])
         utils.log('Thumb: %s' % video['thumb'])
         if not re.search(r"(ustream)|(vimeo)", video['url']) is None:
             videos.append(video)

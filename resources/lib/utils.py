@@ -13,8 +13,7 @@ import xbmcplugin
 
 import StorageServer
 
-from resources.lib import vimeo
-from resources.lib import ustream
+from elementtree import ElementTree as ET
 
 ### get addon info
 __addon__             = xbmcaddon.Addon()
@@ -23,7 +22,7 @@ __addonidint__        = int(sys.argv[1])
 __addondir__          = xbmc.translatePath(__addon__.getAddonInfo('path'))
 
 # initialise cache object to speed up plugin operation
-cache = StorageServer.StorageServer(__addonid__ + '-videos', 48)
+cache = StorageServer.StorageServer(__addonid__ + '-ustreamvideos', 96)
 
 def getParams():
     
@@ -110,7 +109,7 @@ def log(txt, severity=xbmc.LOGDEBUG):
     # write message to xbmc.log
     xbmc.log(msg=message, level=severity)
 
-def addVideo(linkName = '', url = '', thumbPath = '', date = ''):
+def addVideo(linkName = '', source = '', videoID = '', thumbPath = '', date = ''):
     
     """Add a video to an XBMC directory listing
     
@@ -119,7 +118,7 @@ def addVideo(linkName = '', url = '', thumbPath = '', date = ''):
                 thumbPath -- A string containg the url/path of the video's thumbnail image
                 date -- a dataetime object containg the date of the video"""
     
-    finalUrl = sys.argv[0] + "?url=" + urllib.quote_plus(url)
+    url = sys.argv[0] + "?source=" + source + "&id=" + videoID
     
     # initialise a listitem object to store video details
     li = xbmcgui.ListItem(linkName, iconImage = thumbPath, thumbnailImage = thumbPath)
@@ -134,11 +133,14 @@ def addVideo(linkName = '', url = '', thumbPath = '', date = ''):
     li.setProperty( "Fanart_Image", os.path.join(__addondir__, 'fanart.jpg'))
     
     # add listitem object to list
-    xbmcplugin.addDirectoryItem(handle = __addonidint__, url = finalUrl, listitem = li, isFolder = False)
+    xbmcplugin.addDirectoryItem(handle = __addonidint__, url = url, listitem = li, isFolder = False)
+
 
 def addNext(page):
     
-    """Add a 'Next Page' button to a directory listing"""
+    """Add a 'Next Page' button to a directory listing
+    
+    Arguments:  page -- An Integer containing the number of the page to load on clicking the next page button"""
     
     # construct url of next page
     u = sys.argv[0] + "?page=%s" % str(page)
@@ -154,28 +156,28 @@ def addNext(page):
     
     # add listitem object to list
     xbmcplugin.addDirectoryItem(handle = __addonidint__, url = u, listitem = li, isFolder = True)
-    
+
+
 def endDir():
+    
+    """Tell XBMC we have finished adding items to the directory list"""
+    
     xbmcplugin.endOfDirectory(handle = __addonidint__)
 
-def playVideo(url):
+
+def playVideo(vidSrc, vidID):
     
-    """Retrieve video details and play video
+    """Resolve the provided url and play video
     
     Arguments:  url -- A string containing the url of the videos page on mmafighting.com"""
     
-    # If the video is Vimeo (most likely) get the Vimeo URL
-    if re.search(r'vimeo', url):
-        videoUrl = cache.cacheFunction(vimeo.pull_video_url, url)
-        success = True
-    # If Ustream, the same
-    elif re.search(r'ustream', url):
-        videoUrl = cache.cacheFunction(ustream.pull_video_url, url)
+    # call getVideoUrl to resolve url for playback
+    videoUrl = getVideoUrl(vidSrc, vidID)
+    
+    # set success to true if video found
+    if videoUrl:
         success = True
     else:
-        success = False
-        
-    if not videoUrl:
         success = False
     
     # add video details to listitem
@@ -183,3 +185,40 @@ def playVideo(url):
     
     # play listitem
     xbmcplugin.setResolvedUrl(handle = __addonidint__, succeeded = success, listitem = listitem)  
+
+
+def getVideoUrl(vidSrc, vidID):
+
+    """Resolve the video url based on source and video id
+    
+    Arguments:  vidSrc -- A string containing the video's source: 'vimeo' or 'ustream'
+                vidID -- A string containing the video's ID number
+    Returns:    videoUrl -- A string containing the url of the video to be played"""
+
+    # check if video is from Vimeo
+    if vidSrc == 'vimeo':
+
+        # construct path to play video using vimeo plugin
+        videoUrl = 'plugin://plugin.video.vimeo?action=play_video&videoid=' + vidID
+    
+    # check if video is from ustream
+    elif vidSrc == 'ustream':
+        
+        # construct url to use for API call
+        apiUrl = 'http://api.ustream.tv/xml/video/%s/getInfo?key=A5379FCD5891A9F9A029F84422CAC98C' % vidID
+        
+        # initialise the tree object using the returned data so it can be parsed
+        tree = ET.fromstring(cache.cacheFunction(getHtml, apiUrl))
+        video = tree.find('results')
+
+        # get episode url
+        videoUrl = video.findtext('mp4Url')
+
+        # check if video url was found
+        if not output_url:
+            
+            # check alternate field for video url
+            videoUrl = video.findtext('liveHttpUrl')
+
+    #return video url
+    return videoUrl
