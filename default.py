@@ -43,7 +43,7 @@ class Main:
                 # Set page number to 1 if not dound
                 pageNum = 1
             
-            (utils.log('Checking page for videos: Page %s' % str(pageNum))
+            utils.log('Checking page for videos: Page %s' % str(pageNum))
             
             # scrape site for list of videos
             video_list = {}
