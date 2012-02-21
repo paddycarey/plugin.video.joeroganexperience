@@ -215,7 +215,7 @@ def getVideoUrl(vidSrc, vidID):
         videoUrl = video.findtext('mp4Url')
 
         # check if video url was found
-        if not output_url:
+        if not videoUrl:
             
             # check alternate field for video url
             videoUrl = video.findtext('liveHttpUrl')
