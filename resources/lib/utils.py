@@ -149,6 +149,9 @@ def addNext(page):
     # set title of list item
     li.setInfo( type = "Video", infoLabels = { "Title" : 'Next Page' })
     
+    # set fanart image for video
+    li.setProperty( "Fanart_Image", os.path.join(__addondir__, 'fanart.jpg'))
+    
     # add listitem object to list
     xbmcplugin.addDirectoryItem(handle = __addonidint__, url = u, listitem = li, isFolder = True)
     
