@@ -73,6 +73,7 @@ def getParams():
     # return dict of params
     return param
 
+
 def getHtml(url):
     
     """Retrieve and return remote resource as string
@@ -96,6 +97,7 @@ def getHtml(url):
     # return the retrieved data
     return data
 
+
 def log(txt, severity=xbmc.LOGDEBUG):
     
     """Log txt to xbmc.log at specified severity
@@ -108,6 +110,7 @@ def log(txt, severity=xbmc.LOGDEBUG):
     
     # write message to xbmc.log
     xbmc.log(msg=message, level=severity)
+
 
 def addVideo(linkName = '', source = '', videoID = '', thumbPath = '', date = ''):
     
