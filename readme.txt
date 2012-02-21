@@ -1,19 +1,10 @@
-The Joe Rogan Experience XBMC Script
+The Joe Rogan Experience Video Plugin for XBMC
 =======================
-version 0.2.1
 
-### Summary
+This plugin will allow you to browse and stream video episodes of the Joe Rogan Experience podcast.
 
-Watch videos on XBMC from The Joe Rogan Experience USTREAM Channel
+This repo contains the Eden fork of this addon, if you are running Dharma please see: https://github.com/lextoumbourou/xbmc-joe-rogan-experience
 
-### Setup/Installation
+If you have any questions or comments please post in the addon thread on the XBMC forum: http://forum.xbmc.org/showthread.php?t=111254
 
-Install through System > Add-ons > Install from zip file > then open the zip file you downloaded 
-
-### To Do
-
-- Add Live functionality (to watch live streams when they're available)
-
-### Contact
-
-lextoumbourou@gmail.com
+Or you can of course add an issue on Github.
