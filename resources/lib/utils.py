@@ -176,8 +176,10 @@ def playVideo(vidSrc, vidID):
     
     # set success to true if video found
     if videoUrl:
+        log('Successfully resolved video url: %s' % videoUrl)
         success = True
     else:
+        log('Unable to resolve video url', xbmc.LOGERROR)
         success = False
     
     # add video details to listitem
