@@ -23,7 +23,7 @@ __addonidint__        = int(sys.argv[1])
 __addondir__          = xbmc.translatePath(__addon__.getAddonInfo('path'))
 
 # initialise cache object to speed up plugin operation
-cache = StorageServer.StorageServer(__addonid__ + '-videos', 24)
+cache = StorageServer.StorageServer(__addonid__ + '-videos', 48)
 
 def getParams():
     
@@ -170,6 +170,9 @@ def playVideo(url):
         videoUrl = cache.cacheFunction(ustream.pull_video_url, url)
         success = True
     else:
+        success = False
+        
+    if not videoUrl:
         success = False
     
     # add video details to listitem
